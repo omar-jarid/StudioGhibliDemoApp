@@ -68,9 +68,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // Il resto avviene in questa funzione.
                     StudioGhibliAppCompose(
-                        listFilms = films.value,
+                        list = films.value,
                         textState = remember { mutableStateOf("") },
-                        filmViewModel = viewModel,
+                        viewModel = viewModel,
                         navController = rememberNavController()
                     )
                 }

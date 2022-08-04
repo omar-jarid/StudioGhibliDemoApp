@@ -165,9 +165,7 @@ fun FilmDetail(film: Film, navController: NavHostController) {
     // Altezze indicative
     val maxHeight = 300f
     val minHeight = 80f
-
     val d = LocalDensity.current.density
-
     val imageHeightPx = with(LocalDensity.current) { maxHeight.dp.roundToPx().toFloat() }
     val imageMinHeightPx = with(LocalDensity.current) { minHeight.dp.roundToPx().toFloat() }
     val imageOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -189,15 +187,11 @@ fun FilmDetail(film: Film, navController: NavHostController) {
     }
 
     Box {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection)) {
+        Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
             LazyColumn {
                 item {
                     // E' lui che devo animare!
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height((a / d).dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height((a / d).dp)) {
                         ImageDetail(film = film)
                     }
 

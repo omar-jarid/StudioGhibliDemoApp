@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.StudioGhibliDemoApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/dark_gray</item>
+    </style>
+
+    <!-- Splash Screen per Android da 12 in poi (API >= 31). -->
+    <style name="Theme.SplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/dark_gray</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_studio_ghibli_splash</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.StudioGhibliDemoApp</item>
+    </style>
+</resources>

@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import omarjarid.example.domain.model.Film
-import omarjarid.studioghibliapp.Routes
 import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 
 // Punto di navigazione.
@@ -24,9 +23,8 @@ fun StudioGhibliNavHost(
     navController: NavHostController
 ) {
     // QUI vado a costruire la navigation del mio programma.
-    NavHost(navController = navController, startDestination = Routes.SPLASH) {
-        composable(Routes.SPLASH) { SplashScreen(navController = navController) }
-        composable(Routes.FILMS) {
+    NavHost(navController = navController, startDestination = "films") {
+        composable(route = "films") {
             FilmBodyContent(
                 lista = listFilms,
                 textState = textState,
@@ -36,7 +34,7 @@ fun StudioGhibliNavHost(
         }
 
         composable(
-            route = "${Routes.FILMS}/{id}",
+            route = "films/{id}",
             arguments = listOf(
                 navArgument("id") { type = NavType.StringType }
             )
@@ -54,18 +52,18 @@ fun StudioGhibliNavHost(
 // Composable principale, chiama il NavHost.
 @Composable
 fun StudioGhibliAppCompose(
-    listFilms: List<Film>,
+    list: List<Film>,
     textState: MutableState<String>,
-    filmViewModel: FilmViewModel,
+    viewModel: FilmViewModel,
     navController: NavHostController
 ) {
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            // Qui potrebbe volerci una progress bar.
+            CircularProgressBar(isDisplayed = list.isEmpty())
             StudioGhibliNavHost(
-                listFilms = listFilms,
+                listFilms = list,
                 textState = textState,
-                filmViewModel = filmViewModel,
+                filmViewModel = viewModel,
                 navController = navController
             )
         }

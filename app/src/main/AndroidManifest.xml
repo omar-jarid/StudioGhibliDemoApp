@@ -18,13 +18,17 @@
         android:theme="@style/Theme.StudioGhibliDemoApp"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.StudioGhibliDemoApp">
+            android:theme="@style/Theme.SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.StudioGhibliDemoApp"/>
     </application>
 </manifest>

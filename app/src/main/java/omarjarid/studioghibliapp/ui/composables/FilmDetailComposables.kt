@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.skydoves.landscapist.glide.GlideImage
 import omarjarid.example.domain.model.Film
 import omarjarid.studioghibliapp.R
@@ -30,11 +33,11 @@ fun BackButton(modifier: Modifier = Modifier, navController: NavHostController) 
     Button(
         onClick = { navigateTo("films", navController = navController) },
         contentPadding = PaddingValues(),
+        elevation = null,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent,
             contentColor = Color.LightGray
         ),
-        elevation = ButtonDefaults.elevation(),
         modifier = modifier
             .width(30.dp)
             .height(30.dp)
@@ -66,10 +69,10 @@ fun FilmTitle(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Synopsis(text: String) {
+fun Overview(text: String) {
     Column(modifier = Modifier.padding(horizontal = 8.dp)) {
         Spacer(modifier = Modifier.height(8.dp))
-        BoldText(text = "Synopsis: ")
+        BoldText(text = "Overview ")
         Text(text = text)
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -80,7 +83,7 @@ fun FilmRow(field: String, value: String, modifier: Modifier = Modifier) {
     Column {
         Spacer(modifier = modifier.height(8.dp))
         Row(modifier = modifier.padding(start = 8.dp)) {
-            BoldText(text = "$field: ")
+            BoldText(text = field)
             Text(text = value)
         }
 
@@ -90,12 +93,26 @@ fun FilmRow(field: String, value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ImageDetail(film: Film) {
+fun FilmColumn(field: String, value: String, modifier: Modifier = Modifier) {
+    Column {
+        Spacer(modifier = modifier.height(8.dp))
+        Column(modifier = modifier.padding(start = 8.dp)) {
+            BoldText(text = field)
+            Text(text = value)
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Divider(modifier = Modifier.height(2.dp))
+    }
+}
+
+@Composable
+fun ImageDetail(film: Film, modifier: Modifier = Modifier) {
     ConstraintLayout {
         // Destructuring declaration per i riferimenti.
         val (imgFilm, tvTitle) = createRefs()
         GlideImage(
-            imageModel = film.image,
+            imageModel = film.movieBanner,
             placeHolder = painterResource(id = R.drawable.studio_ghibli_logo),
             error = painterResource(id = R.drawable.studio_ghibli_logo),
             contentDescription = film.title,
@@ -108,60 +125,79 @@ fun ImageDetail(film: Film) {
         )
 
         FilmTitle(
-            text = film.title,
+            text = "${film.title} (${film.releaseDate})",
             modifier = Modifier.constrainAs(tvTitle) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom, margin = 8.dp)
             }
         )
+
+
+
     }
 }
 
 @Composable
 fun ListDetail(film: Film) {
     Column {
-        Synopsis(text = film.description)
-        Divider(modifier = Modifier.height(2.dp))
-        FilmRow(
+        FilmColumn(
             field = "Original title",
             value = "${film.originalTitle} [${film.originalTitleRomanised}]"
         )
 
+        Overview(text = film.description)
+        Divider(modifier = Modifier.height(2.dp))
         FilmRow(
-            field = "Director",
+            field = "Director: ",
             value = film.director
         )
 
         FilmRow(
-            field = "Producer",
+            field = "Producer: ",
             value = film.producer
         )
 
         FilmRow(
-            field = "Year",
-            value = film.releaseDate
-        )
-
-        FilmRow(
-            field = "Duration",
+            field = "Duration: ",
             value = "${film.runningTime} minutes"
         )
 
-        FilmRow(
-            field = "Rotten Tomatoes score",
-            value = "${film.rtScore}%"
-        )
 
-        // Così non mi taglia l'ultima riga se scrollo.
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
-
-// La paginetta va fatta un po' più bellina. Vedi UIzard.
 @Composable
-fun FilmDetail(film: Film, navController: NavHostController) {
+fun RT(film: Film, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        BoldText(text = "Rotten Tomatoes score")
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = film.rtScore,
+            color = Color.Black,
+            fontSize = 25.sp,
+            modifier = Modifier
+                .padding(16.dp)
+                .drawBehind {
+                    drawCircle(
+                        color = when {
+                            film.rtScore.toInt() >= 80 -> Color.Green
+                            film.rtScore.toInt() in 60..79 -> Color.Yellow
+                            else -> Color.Red
+                        },
+
+                        radius = this.size.maxDimension
+                    )
+                }
+        )
+    }
+}
+
+@Composable
+fun FilmDetail(film: Film, navController: NavHostController = rememberNavController()) {
     // Altezze indicative
     val maxHeight = 300f
     val minHeight = 80f
@@ -186,16 +222,26 @@ fun FilmDetail(film: Film, navController: NavHostController) {
         progress = (a / imageHeightPx - minHeight / maxHeight) / (1f - minHeight / maxHeight)
     }
 
-    Box {
-        Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
-            LazyColumn {
-                item {
-                    // E' lui che devo animare!
-                    Box(modifier = Modifier.fillMaxWidth().height((a / d).dp)) {
-                        ImageDetail(film = film)
-                    }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .nestedScroll(nestedScrollConnection)) {
+        LazyColumn {
+            item {
+                // E' lui che devo animare!
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height((a / d).dp)) {
+                    ImageDetail(film = film)
+                }
 
-                    ListDetail(film = film)
+                ListDetail(film = film)
+                ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+                    val rtScore = createRef()
+                    RT(film = film, modifier = Modifier.constrainAs(rtScore) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    })
                 }
             }
         }
@@ -207,5 +253,6 @@ fun FilmDetail(film: Film, navController: NavHostController) {
             Spacer(modifier = Modifier.height(40.dp))
             BackButton(navController = navController)
         }
+
     }
 }

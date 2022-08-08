@@ -32,18 +32,15 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun FilmCard(film: Film, navController: NavHostController) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable(
-                onClick = { navigateTo(route = "films/${film.id}", navController = navController) }
-            ),
+        modifier = Modifier.padding(8.dp).clickable(
+            onClick = { navigateTo(route = "films/${film.id}", navController = navController) }
+        ),
         elevation = 2.dp
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // In verità l'API ha le immagini per i film.
             GlideImage(
                 imageModel = film.image,
                 placeHolder = painterResource(id = R.drawable.studio_ghibli_logo),

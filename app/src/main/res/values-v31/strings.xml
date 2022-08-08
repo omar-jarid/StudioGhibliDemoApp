@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="rotten_tomatoes_score">Rotten Tomatoes score</string>
+    <string name="app_name">StudioGhibliDemoApp</string>
 </resources>

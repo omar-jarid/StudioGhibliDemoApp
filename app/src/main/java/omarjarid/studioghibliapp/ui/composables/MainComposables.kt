@@ -35,15 +35,10 @@ fun StudioGhibliNavHost(
 
         composable(
             route = "films/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.StringType }
-            )
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { navBackStackEntry ->
             navBackStackEntry.arguments?.getString("id")?.let { id ->
-                FilmDetail(
-                    film = listFilms.first { it.id == id },
-                    navController = navController
-                )
+                FilmDetail(film = listFilms.first { it.id == id }, navController = navController)
             }
         }
     }

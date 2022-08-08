@@ -9,6 +9,7 @@ data class FilmDataModel(
     val id: String? = "",
     val image: String? = "",
     val locations: List<String>? = listOf(),
+    val movie_banner: String? = "",
     val original_title: String? = "",
     val original_title_romanised: String? = "",
     val people: List<String>? = listOf(),
@@ -24,6 +25,7 @@ data class FilmDataModel(
 
 //... perché a partire da esso creerò una classe del Model!
 fun FilmDataModel.toDomainModel(): Film = Film(
+    movieBanner = this.movie_banner.orEmpty(),
     description = this.description.orEmpty(),
     director = this.director.orEmpty(),
     id = this.id.orEmpty(),

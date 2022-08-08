@@ -67,7 +67,10 @@ data class Film(
     val url: String = "",
 
     // Locandina del film.
-    val image: String = ""
+    val image: String = "",
+
+    // Banner del film.
+    val movieBanner: String = ""
 )
 
 /*

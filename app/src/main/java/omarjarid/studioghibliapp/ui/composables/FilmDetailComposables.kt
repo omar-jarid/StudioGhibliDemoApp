@@ -1,18 +1,21 @@
 package omarjarid.studioghibliapp.ui.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,29 +24,17 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
 import omarjarid.example.domain.model.Film
-import omarjarid.studioghibliapp.R
 import omarjarid.studioghibliapp.navigateTo
 import omarjarid.studioghibliapp.ui.theme.TextWhite
 
 @Composable
-fun BackButton(modifier: Modifier = Modifier, navController: NavHostController) {
-    Button(
-        onClick = { navigateTo("films", navController = navController) },
-        contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Transparent,
-            contentColor = Color.LightGray
-        ),
-        elevation = ButtonDefaults.elevation(),
-        modifier = modifier
-            .width(30.dp)
-            .height(30.dp)
-    ) { Icon(painter = painterResource(id = R.drawable.ic_arrowback), contentDescription = null) }
+fun BoldText(text: String, modifier: Modifier = Modifier) {
+    Text(text = text, fontWeight = FontWeight.Bold, modifier = modifier)
 }
 
 @Composable
-fun BoldText(text: String, modifier: Modifier = Modifier) {
-    Text(text = text, fontWeight = FontWeight.Bold, modifier = modifier)
+fun RTText(text: String, modifier: Modifier = Modifier) {
+    Text(text = text, fontWeight = FontWeight.Bold, fontSize = 24.sp, modifier = modifier)
 }
 
 @Composable
@@ -56,20 +47,16 @@ fun FilmTitle(text: String, modifier: Modifier = Modifier) {
         modifier = modifier,
         style = TextStyle(
             fontSize = 24.sp,
-            shadow = Shadow(
-                color = Color.Black,
-                offset = offset,
-                blurRadius = 3f
-            )
+            shadow = Shadow(color = Color.Black, offset = offset, blurRadius = 3f)
         )
     )
 }
 
 @Composable
-fun Synopsis(text: String) {
-    Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+fun Overview(text: String) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Spacer(modifier = Modifier.height(8.dp))
-        BoldText(text = "Synopsis: ")
+        BoldText(text = "Overview ")
         Text(text = text)
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -77,141 +64,121 @@ fun Synopsis(text: String) {
 
 @Composable
 fun FilmRow(field: String, value: String, modifier: Modifier = Modifier) {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         Spacer(modifier = modifier.height(8.dp))
         Row(modifier = modifier.padding(start = 8.dp)) {
-            BoldText(text = "$field: ")
+            BoldText(text = field)
             Text(text = value)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Divider(modifier = Modifier.height(2.dp))
     }
 }
 
 @Composable
-fun ImageDetail(film: Film) {
-    ConstraintLayout {
-        // Destructuring declaration per i riferimenti.
-        val (imgFilm, tvTitle) = createRefs()
-        GlideImage(
-            imageModel = film.image,
-            placeHolder = painterResource(id = R.drawable.studio_ghibli_logo),
-            error = painterResource(id = R.drawable.studio_ghibli_logo),
-            contentDescription = film.title,
-            modifier = Modifier.constrainAs(imgFilm) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )
+fun RTRow(film: Film, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Spacer(modifier = modifier.height(8.dp))
+        Row(modifier = modifier.padding(start = 8.dp)) {
+            RTText(text = "Rotten Tomatoes score: ")
+            Text(
+                text = film.rtScore,
+                color = when {
+                    film.rtScore.toInt() >= 80 -> Color.Green
+                    film.rtScore.toInt() in 60..79 -> Color.Yellow
+                    else -> Color.Red
+                },
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-        FilmTitle(
-            text = film.title,
-            modifier = Modifier.constrainAs(tvTitle) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom, margin = 8.dp)
-            }
-        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
 @Composable
-fun ListDetail(film: Film) {
+fun FilmColumn(field: String, value: String, modifier: Modifier = Modifier) {
     Column {
-        Synopsis(text = film.description)
-        Divider(modifier = Modifier.height(2.dp))
-        FilmRow(
-            field = "Original title",
-            value = "${film.originalTitle} [${film.originalTitleRomanised}]"
-        )
+        Spacer(modifier = modifier.height(8.dp))
+        Column(modifier = modifier.padding(start = 8.dp)) {
+            BoldText(text = field)
+            Text(text = value)
+        }
 
-        FilmRow(
-            field = "Director",
-            value = film.director
-        )
-
-        FilmRow(
-            field = "Producer",
-            value = film.producer
-        )
-
-        FilmRow(
-            field = "Year",
-            value = film.releaseDate
-        )
-
-        FilmRow(
-            field = "Duration",
-            value = "${film.runningTime} minutes"
-        )
-
-        FilmRow(
-            field = "Rotten Tomatoes score",
-            value = "${film.rtScore}%"
-        )
-
-        // Così non mi taglia l'ultima riga se scrollo.
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
-
-// La paginetta va fatta un po' più bellina. Vedi UIzard.
 @Composable
 fun FilmDetail(film: Film, navController: NavHostController) {
     // Altezze indicative
     val maxHeight = 300f
-    val minHeight = 80f
-
+    val arrowHeight = 50f
     val d = LocalDensity.current.density
-
     val imageHeightPx = with(LocalDensity.current) { maxHeight.dp.roundToPx().toFloat() }
-    val imageMinHeightPx = with(LocalDensity.current) { minHeight.dp.roundToPx().toFloat() }
-    val imageOffsetHeightPx = remember { mutableStateOf(0f) }
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newOffset = imageOffsetHeightPx.value + delta
-                imageOffsetHeightPx.value = newOffset.coerceIn(imageMinHeightPx - imageHeightPx, 0f)
-                return Offset.Zero
-            }
-        }
-    }
+    val arrowHeightPx = with(LocalDensity.current) { arrowHeight.dp.roundToPx().toFloat() }
+    val horizontalPaddingModifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
 
-    val a = imageHeightPx + imageOffsetHeightPx.value
-    var progress by remember { mutableStateOf(0f) }
-    LaunchedEffect(key1 = imageOffsetHeightPx.value) {
-        progress = (a / imageHeightPx - minHeight / maxHeight) / (1f - minHeight / maxHeight)
-    }
+    LazyColumn {
+        item {
+            ConstraintLayout {
+                val (ivBack, ivBanner, tvTitleYear) = createRefs()
+                GlideImage(
+                    imageModel = film.movieBanner,
+                    modifier = Modifier.height((imageHeightPx / d).dp).constrainAs(ivBanner) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }.clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                )
 
-    Box {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection)) {
-            LazyColumn {
-                item {
-                    // E' lui che devo animare!
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height((a / d).dp)) {
-                        ImageDetail(film = film)
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.size(width = 24.dp, height = 24.dp).constrainAs(ivBack) {
+                            start.linkTo(parent.start, margin = 16.dp)
+                            top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
+                        }.clickable { navigateTo("films", navController = navController) }
+                )
+
+                FilmTitle(
+                    text = "${film.title} (${film.releaseDate})",
+                    modifier = Modifier.constrainAs(tvTitleYear) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(ivBanner.bottom, margin = 8.dp)
                     }
-
-                    ListDetail(film = film)
-                }
+                )
             }
-        }
-    }
 
-    Row {
-        Spacer(modifier = Modifier.width(10.dp))
-        Column {
-            Spacer(modifier = Modifier.height(40.dp))
-            BackButton(navController = navController)
+            RTRow(film = film, modifier = horizontalPaddingModifier)
+            Overview(text = film.description)
+            FilmRow(
+                field = "Original title: ",
+                value = "${film.originalTitle} [${film.originalTitleRomanised}]",
+                modifier = horizontalPaddingModifier
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = horizontalPaddingModifier
+            ) {
+                FilmColumn(field = "Director", value = film.director)
+                FilmColumn(field = "Producer", value = film.producer)
+                FilmColumn(
+                    field = "Duration",
+                    value = "${film.runningTime} minutes",
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
         }
     }
 }

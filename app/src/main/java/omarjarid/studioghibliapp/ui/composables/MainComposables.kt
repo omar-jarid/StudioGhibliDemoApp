@@ -19,7 +19,7 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
     textState: MutableState<String>,
-    filmViewModel: FilmViewModel,
+    viewModel: FilmViewModel,
     navController: NavHostController
 ) {
     // QUI vado a costruire la navigation del mio programma.
@@ -28,7 +28,7 @@ fun StudioGhibliNavHost(
             FilmBodyContent(
                 lista = listFilms,
                 textState = textState,
-                viewModel = filmViewModel,
+                viewModel = viewModel,
                 navController = navController
             )
         }
@@ -58,7 +58,7 @@ fun StudioGhibliAppCompose(
             StudioGhibliNavHost(
                 listFilms = list,
                 textState = textState,
-                filmViewModel = viewModel,
+                viewModel = viewModel,
                 navController = navController
             )
         }

@@ -38,8 +38,7 @@ internal class RetrofitModule {
             Ho specificato l'URL base dell'API e ho anche aggiunto un GsonConverter (per i JSON) e
             un OkHttpClient (come definito prima).
         */
-        return Retrofit.Builder()
-            .baseUrl("https://ghibliapi.herokuapp.com")
+        return Retrofit.Builder().baseUrl("https://ghibliapi.herokuapp.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

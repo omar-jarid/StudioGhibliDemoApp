@@ -34,7 +34,7 @@ fun BoldText(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun RTText(text: String, modifier: Modifier = Modifier) {
-    Text(text = text, fontWeight = FontWeight.Bold, fontSize = 24.sp, modifier = modifier)
+    Text(text = text, fontWeight = FontWeight.Bold, fontSize = 22.sp, modifier = modifier)
 }
 
 @Composable
@@ -85,7 +85,7 @@ fun RTRow(film: Film, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Spacer(modifier = modifier.height(8.dp))
-        Row(modifier = modifier.padding(start = 8.dp)) {
+        Row(modifier = modifier.fillMaxWidth().padding(start = 8.dp)) {
             RTText(text = "Rotten Tomatoes score: ")
             Text(
                 text = film.rtScore,
@@ -94,7 +94,7 @@ fun RTRow(film: Film, modifier: Modifier = Modifier) {
                     film.rtScore.toInt() in 60..79 -> Color.Yellow
                     else -> Color.Red
                 },
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
         }

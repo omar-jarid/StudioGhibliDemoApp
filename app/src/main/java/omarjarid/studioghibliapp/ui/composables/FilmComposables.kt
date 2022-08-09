@@ -14,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
@@ -32,9 +35,11 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun FilmCard(film: Film, navController: NavHostController) {
     Card(
-        modifier = Modifier.padding(8.dp).clickable(
-            onClick = { navigateTo(route = "films/${film.id}", navController = navController) }
-        ),
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable(
+                onClick = { navigateTo(route = "films/${film.id}", navController = navController) }
+            ),
         elevation = 2.dp
     ) {
         Column(
@@ -52,8 +57,6 @@ fun FilmCard(film: Film, navController: NavHostController) {
     }
 }
 
-// Correggi la SearchBar e la sua disposizione.
-
 @Composable
 fun SearchBar(state: MutableState<String>, onSearch: (String) -> Unit, isDisplayed: Boolean) {
     if (isDisplayed) {
@@ -61,9 +64,7 @@ fun SearchBar(state: MutableState<String>, onSearch: (String) -> Unit, isDisplay
         TextField(
             value = state.value,
             onValueChange = { state.value = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
             singleLine = true,
             maxLines = 1,
             leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "Search") },
@@ -109,4 +110,10 @@ fun FilmBodyContent(
             }
         )
     }
+}
+
+@Preview
+@Composable
+fun SearchBarPreview() {
+    SearchBar(state = remember { mutableStateOf("") }, onSearch = {} , isDisplayed = true)
 }

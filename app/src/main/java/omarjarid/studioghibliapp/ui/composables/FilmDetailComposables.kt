@@ -63,22 +63,6 @@ fun Overview(text: String) {
 }
 
 @Composable
-fun FilmRow(field: String, value: String, modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Spacer(modifier = modifier.height(8.dp))
-        Row(modifier = modifier.padding(start = 8.dp)) {
-            BoldText(text = field)
-            Text(text = value)
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-    }
-}
-
-@Composable
 fun RTRow(film: Film, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -160,8 +160,8 @@ fun FilmDetail(film: Film, navController: NavHostController) {
 
             RTRow(film = film, modifier = horizontalPaddingModifier)
             Overview(text = film.description)
-            FilmRow(
-                field = "Original title: ",
+            FilmColumn(
+                field = "Original title",
                 value = "${film.originalTitle} [${film.originalTitleRomanised}]",
                 modifier = horizontalPaddingModifier
             )

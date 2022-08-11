@@ -1,6 +1,7 @@
 package omarjarid.studioghibliapp
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -55,7 +56,10 @@ class MainActivity : ComponentActivity() {
         viewModel.loadFilms()
 
         // Necessario per avere l'immagine dietro la status bar.
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
         setContent {
             // Recupero gli StateFlow con collectAsState().
             val films = viewModel.films.collectAsState()

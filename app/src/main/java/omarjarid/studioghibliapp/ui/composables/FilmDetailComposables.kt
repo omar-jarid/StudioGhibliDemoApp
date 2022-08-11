@@ -124,26 +124,21 @@ fun FilmDetail(film: Film, navController: NavHostController) {
                 val (ivBack, ivBanner, tvTitleYear) = createRefs()
                 GlideImage(
                     imageModel = film.movieBanner,
-                    modifier = Modifier
-                        .height((imageHeightPx / d).dp)
-                        .constrainAs(ivBanner) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
-                        .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                    modifier = Modifier.height((imageHeightPx / d).dp).constrainAs(ivBanner) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }.clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
                 )
 
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(width = 24.dp, height = 24.dp)
-                        .constrainAs(ivBack) {
-                            start.linkTo(parent.start, margin = 16.dp)
-                            top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
-                        }
-                        .clickable { navigateTo("films", navController = navController) }
+
+                    modifier = Modifier.size(width = 24.dp, height = 24.dp).constrainAs(ivBack) {
+                        start.linkTo(parent.start, margin = 16.dp)
+                        top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
+                    }.clickable { navigateTo("films", navController = navController) }
                 )
 
                 FilmTitle(

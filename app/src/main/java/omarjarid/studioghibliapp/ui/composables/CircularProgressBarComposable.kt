@@ -17,10 +17,7 @@ fun CircularProgressBar(isDisplayed: Boolean) {
             val (progressBar, tvLoading) = createRefs()
             CircularProgressIndicator(
                 color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(50.dp)
-                    .constrainAs(progressBar) {
+                modifier = Modifier.fillMaxSize().padding(50.dp).constrainAs(progressBar) {
                         top.linkTo(parent.top, margin = 40.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)

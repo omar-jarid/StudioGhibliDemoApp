@@ -3,7 +3,9 @@ package omarjarid.studioghibliapp.ui.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -69,7 +71,9 @@ fun RTRow(film: Film, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Spacer(modifier = modifier.height(8.dp))
-        Row(modifier = modifier.fillMaxWidth().padding(start = 8.dp)) {
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp)) {
             RTText(text = "Rotten Tomatoes score: ")
             Text(
                 text = film.rtScore,
@@ -108,10 +112,14 @@ fun FilmDetail(film: Film, navController: NavHostController) {
     val d = LocalDensity.current.density
     val imageHeightPx = with(LocalDensity.current) { maxHeight.dp.roundToPx().toFloat() }
     val arrowHeightPx = with(LocalDensity.current) { arrowHeight.dp.roundToPx().toFloat() }
-    val horizontalPaddingModifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+    val horizontalPaddingModifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 8.dp)
 
-    LazyColumn {
-        item {
+    // La LazyColumn non scrolla come dovrebbe. Faccio una Column normale ma scrollabile.
+    val scrollState = rememberScrollState()
+    Column(modifier = Modifier.verticalScroll(state = scrollState)) {
+        //item {
             ConstraintLayout {
                 val (ivBack, ivBanner, tvTitleYear) = createRefs()
                 GlideImage(
@@ -126,6 +134,7 @@ fun FilmDetail(film: Film, navController: NavHostController) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
+
                     modifier = Modifier.size(width = 24.dp, height = 24.dp).constrainAs(ivBack) {
                         start.linkTo(parent.start, margin = 16.dp)
                         top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
@@ -150,19 +159,25 @@ fun FilmDetail(film: Film, navController: NavHostController) {
                 modifier = horizontalPaddingModifier
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+            FilmColumn(
+                field = "Director",
+                value = film.director,
                 modifier = horizontalPaddingModifier
-            ) {
-                FilmColumn(field = "Director", value = film.director)
-                FilmColumn(field = "Producer", value = film.producer)
-                FilmColumn(
-                    field = "Duration",
-                    value = "${film.runningTime} minutes",
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            }
-        }
+            )
+
+            FilmColumn(
+                field = "Producer",
+                value = film.producer,
+                modifier = horizontalPaddingModifier
+            )
+
+            FilmColumn(
+                field = "Duration",
+                value = "${film.runningTime} minutes",
+                modifier = horizontalPaddingModifier
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+        //}
     }
 }

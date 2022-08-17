@@ -12,24 +12,18 @@ import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun CircularProgressBar(isDisplayed: Boolean) {
-    if(isDisplayed) {
+    if (isDisplayed) {
         ConstraintLayout {
-            val (progressBar, tvLoading) = createRefs()
+            val progressBar = createRef()
             CircularProgressIndicator(
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier.fillMaxSize().padding(50.dp).constrainAs(progressBar) {
-                        top.linkTo(parent.top, margin = 40.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    }
+                    top.linkTo(parent.top, margin = 40.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
             )
-
-            Text(text = "Loading...", modifier = Modifier.constrainAs(tvLoading) {
-                top.linkTo(progressBar.bottom, margin = 40.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            })
         }
     }
 }

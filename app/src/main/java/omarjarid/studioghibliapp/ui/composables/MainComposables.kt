@@ -14,7 +14,6 @@ import androidx.navigation.navArgument
 import omarjarid.example.domain.model.Film
 import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 
-// Punto di navigazione.
 @Composable
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
@@ -22,7 +21,6 @@ fun StudioGhibliNavHost(
     viewModel: FilmViewModel,
     navController: NavHostController
 ) {
-    // QUI vado a costruire la navigation del mio programma.
     NavHost(navController = navController, startDestination = "films") {
         composable(route = "films") {
             FilmBodyContent(
@@ -37,14 +35,13 @@ fun StudioGhibliNavHost(
             route = "films/{id}",
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { navBackStackEntry ->
-            navBackStackEntry.arguments?.getString("id")?.let { id ->
+            navBackStackEntry.arguments?.getString("id").let { id ->
                 FilmDetail(film = listFilms.first { it.id == id }, navController = navController)
             }
         }
     }
 }
 
-// Composable principale, chiama il NavHost.
 @Composable
 fun StudioGhibliAppCompose(
     list: List<Film>,

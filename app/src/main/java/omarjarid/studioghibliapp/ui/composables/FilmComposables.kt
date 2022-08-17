@@ -32,28 +32,23 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun FilmCard(film: Film, navController: NavHostController) {
     Card(
-        modifier = Modifier.padding(8.dp).clickable(
-            onClick = { navigateTo(route = "films/${film.id}", navController = navController) }
-        ),
+        modifier = Modifier.padding(8.dp).clickable {
+            navigateTo(route = "films/${film.id}", navController = navController)
+        },
         elevation = 2.dp
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            GlideImage(
-                imageModel = film.image,
-                placeHolder = painterResource(id = R.drawable.studio_ghibli_logo),
-                error = painterResource(id = R.drawable.studio_ghibli_logo),
-                contentScale = ContentScale.Fit,
-                contentDescription = film.title
-            )
-        }
+        GlideImage(
+            imageModel = film.image,
+            placeHolder = painterResource(id = R.drawable.studio_ghibli_logo),
+            error = painterResource(id = R.drawable.studio_ghibli_logo),
+            contentScale = ContentScale.Fit,
+            contentDescription = film.title
+        )
     }
 }
 
 @Composable
-fun SearchBar(state: MutableState<String>, onSearch: (String) -> Unit, isDisplayed: Boolean) {
+fun SearchBar(state: MutableState<String>, isDisplayed: Boolean, onSearch: (String) -> Unit) {
     if (isDisplayed) {
         val focusManager = LocalFocusManager.current
         TextField(
@@ -64,12 +59,10 @@ fun SearchBar(state: MutableState<String>, onSearch: (String) -> Unit, isDisplay
             maxLines = 1,
             leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "Search") },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    onSearch(state.value)
-                    focusManager.clearFocus()
-                }
-            ),
+            keyboardActions = KeyboardActions {
+                onSearch(state.value)
+                focusManager.clearFocus()
+            },
             shape = RoundedCornerShape(corner = CornerSize(16.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
@@ -91,18 +84,12 @@ fun FilmBodyContent(
 ) {
     Column {
         Spacer(modifier = Modifier.height(40.dp))
-        SearchBar(
-            state = textState,
-            onSearch = { viewModel.search(it) },
-            isDisplayed = lista.isNotEmpty()
-        )
-
+        SearchBar(state = textState, isDisplayed = lista.isNotEmpty()) { viewModel.search(it) }
         LazyVerticalGrid(
             cells = GridCells.Fixed(2),
-            contentPadding = PaddingValues(8.dp),
-            content = {
-                items(lista.size) { i -> FilmCard(film = lista[i], navController = navController) }
-            }
-        )
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            items(lista.size) { i -> FilmCard(film = lista[i], navController = navController) }
+        }
     }
 }

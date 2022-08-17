@@ -2,7 +2,6 @@ package omarjarid.studioghibliapp.framework.network
 
 import omarjarid.example.domain.model.Film
 
-// DataModel nello strato più esterno, è il tipo di ritorno che voglio nella risposta HTTP...
 data class FilmDataModel(
     val description: String? = "",
     val director: String? = "",
@@ -23,7 +22,6 @@ data class FilmDataModel(
     val vehicles: List<String>? = listOf()
 )
 
-//... perché a partire da esso creerò una classe del Model!
 fun FilmDataModel.toDomainModel(): Film = Film(
     movieBanner = this.movie_banner.orEmpty(),
     description = this.description.orEmpty(),
@@ -44,5 +42,4 @@ fun FilmDataModel.toDomainModel(): Film = Film(
     vehicles = this.vehicles.orEmpty()
 )
 
-// Qui nel caso fosse richiesta una lista, la vado a creare.
 fun List<FilmDataModel>.toDomainModel(): List<Film> = this.map { it.toDomainModel() }

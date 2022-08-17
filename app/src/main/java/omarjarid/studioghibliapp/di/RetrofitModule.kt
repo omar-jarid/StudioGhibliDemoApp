@@ -14,18 +14,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal class RetrofitModule {
-    /*
-        L'annotazione @Provides dice a Hilt quale implementazione usare quando deve fornire
-        un'istanza di una classe di una libreria esterna (in questo caso quando devo fornire
-        un'istanza di OkHttpClient "as is").
-    */
     @Provides
     @Singleton
     fun provideOkHttp(): OkHttpClient {
-        // L'HttpLoggingInterceptor tiene traccia di richiesta e risposta...
         val interceptor = HttpLoggingInterceptor()
-
-        //... in particolare dell'header e del body!
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder().addInterceptor(interceptor).build()
     }
@@ -33,11 +25,6 @@ internal class RetrofitModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): StudioGhibliApiInterface {
-        // Retrofit crea un'implementazione dell'interfaccia tramite il builder.
-        /*
-            Ho specificato l'URL base dell'API e ho anche aggiunto un GsonConverter (per i JSON) e
-            un OkHttpClient (come definito prima).
-        */
         return Retrofit.Builder().baseUrl("https://ghibliapi.herokuapp.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)

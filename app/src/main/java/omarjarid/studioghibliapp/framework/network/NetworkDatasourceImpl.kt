@@ -11,11 +11,6 @@ class NetworkDatasourceImpl @Inject constructor(
 ) : NetworkDatasource {
     override suspend fun getAllFilms(): List<Film> {
         val response = studioGhibliApiInterface.getAllFilms()
-
-        /*
-            In questi return devo comunque avere qualcosa di non null, quindi o metto la risposta
-            che ha successo o qualcosa di vuoto.
-        */
         return if (response.isSuccessful) response.body()!!.toDomainModel() else emptyList()
     }
 

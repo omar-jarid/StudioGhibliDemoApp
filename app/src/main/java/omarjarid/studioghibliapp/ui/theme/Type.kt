@@ -18,7 +18,6 @@ val DMSans = FontFamily(
     Font(R.font.dmsans_medium_italic, FontWeight.Medium, FontStyle.Italic)
 )
 
-// Faccio una roba con un font un po' più bellino.
 val GhibliTypography = Typography(
     defaultFontFamily = DMSans,
     body1 = TextStyle(

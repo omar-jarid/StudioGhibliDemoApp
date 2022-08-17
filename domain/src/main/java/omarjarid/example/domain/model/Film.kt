@@ -1,20 +1,5 @@
 package omarjarid.example.domain.model
 
-/*
-    Nel package "model" vado a inserire le classi che serviranno da "contenitori" dei dati
-    recuperati dall'API, costruite secondo la documentazione.
-
-    In Kotlin usiamo le data class, cioè classi che hanno lo scopo di contenere dati.
-    Hanno il vantaggio di farci portare a casa automaticamente i seguenti metodi per ogni campo
-    dichiarato nel costruttore:
-
-    - equals()
-    - hashCode()
-    - toString(), del tipo Tipo(campo1=valore1, ..., campo_n=valore_n)
-    - funzione componentN() che corrisponde al N-esimo componente in ordine di dichiarazione
-    - copy(), che serve per copiare un oggetto ma permette al contempo di alterare ALCUNI dei campi.
-*/
-
 data class Film(
     // ID univoco che rappresenta un film specifico.
     val id: String = "",
@@ -70,14 +55,5 @@ data class Film(
     val image: String = "",
 
     // Banner del film.
-    val movieBanner: String = ""
+    val movieBanner: String = "" 
 )
-
-/*
-    In Kotlin la visibilità di default è public. Posso anche fregarmene, dato che dichiaro le
-    variabili in sola lettura con la parola chiave val.
-
-    Inoltre ho assegnato un valore di default vuoto a ciascuna variabile dichiarata nel costruttore,
-    per essere sicuro che abbiano tutte un valore anche se non dovessi per qualche motivo riuscire a
-    riempirle.
-*/

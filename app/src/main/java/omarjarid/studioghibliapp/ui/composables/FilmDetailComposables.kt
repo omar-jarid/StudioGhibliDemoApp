@@ -58,7 +58,7 @@ fun FilmTitle(text: String, modifier: Modifier = Modifier) {
 fun Overview(text: String) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Spacer(modifier = Modifier.height(8.dp))
-        BoldText(text = "Overview ")
+        BoldText(text = "Overview")
         Text(text = text)
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -106,7 +106,7 @@ fun FilmColumn(field: String, value: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun FilmDetail(film: Film, navController: NavHostController) {
-    // Altezze indicative
+    // Altezze indicative.
     val maxHeight = 300f
     val arrowHeight = 50f
     val d = LocalDensity.current.density
@@ -116,29 +116,33 @@ fun FilmDetail(film: Film, navController: NavHostController) {
         .fillMaxWidth()
         .padding(horizontal = 8.dp)
 
-    // La LazyColumn non scrolla come dovrebbe. Faccio una Column normale ma scrollabile.
-    val scrollState = rememberScrollState()
-    Column(modifier = Modifier.verticalScroll(state = scrollState)) {
-        //item {
+    LazyColumn {
+        item {
             ConstraintLayout {
                 val (ivBack, ivBanner, tvTitleYear) = createRefs()
                 GlideImage(
                     imageModel = film.movieBanner,
-                    modifier = Modifier.height((imageHeightPx / d).dp).constrainAs(ivBanner) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }.clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                    modifier = Modifier
+                        .height((imageHeightPx / d).dp)
+                        .constrainAs(ivBanner) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
                 )
 
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
 
-                    modifier = Modifier.size(width = 24.dp, height = 24.dp).constrainAs(ivBack) {
-                        start.linkTo(parent.start, margin = 16.dp)
-                        top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
-                    }.clickable { navigateTo("films", navController = navController) }
+                    modifier = Modifier
+                        .size(width = 24.dp, height = 24.dp)
+                        .constrainAs(ivBack) {
+                            start.linkTo(parent.start, margin = 16.dp)
+                            top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
+                        }
+                        .clickable { navigateTo("films", navController = navController) }
                 )
 
                 FilmTitle(
@@ -178,6 +182,6 @@ fun FilmDetail(film: Film, navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(32.dp))
-        //}
+        }
     }
 }

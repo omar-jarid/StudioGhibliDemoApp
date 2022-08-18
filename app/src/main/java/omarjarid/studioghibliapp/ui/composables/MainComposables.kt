@@ -1,11 +1,14 @@
 package omarjarid.studioghibliapp.ui.composables
 
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -42,10 +45,13 @@ fun StudioGhibliNavHost(
 // Ora StudioGhibliAppCompose è stateless.
 @Composable
 fun StudioGhibliAppCompose(
-    list: List<Film>,
-    viewModel: FilmViewModel,
+    //list: List<Film>,
+    viewModel: FilmViewModel
     //navController: NavHostController
 ) {
+    val films = viewModel.films.collectAsState()
+    val list = films.value
+
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             CircularProgressBar(isDisplayed = list.isEmpty())

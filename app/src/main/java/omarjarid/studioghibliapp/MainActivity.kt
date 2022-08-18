@@ -41,11 +41,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     // Ora StudioGhibliAppCompose è stateless.
-                    StudioGhibliAppCompose(
-                        //list = films.value,
-                        viewModel = viewModel,
-                        //navController = rememberNavController()
-                    )
+                    StudioGhibliAppCompose(viewModel)
                 }
             }
         }

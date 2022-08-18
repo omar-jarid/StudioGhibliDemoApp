@@ -44,22 +44,14 @@ fun StudioGhibliNavHost(
 
 // Ora StudioGhibliAppCompose è stateless.
 @Composable
-fun StudioGhibliAppCompose(
-    //list: List<Film>,
-    viewModel: FilmViewModel
-    //navController: NavHostController
-) {
+fun StudioGhibliAppCompose(viewModel: FilmViewModel) {
     val films = viewModel.films.collectAsState()
     val list = films.value
 
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             CircularProgressBar(isDisplayed = list.isEmpty())
-            StudioGhibliNavHost(
-                listFilms = list,
-                viewModel = viewModel,
-                //navController = navController
-            )
+            StudioGhibliNavHost(listFilms = list, viewModel = viewModel)
         }
     }
 }

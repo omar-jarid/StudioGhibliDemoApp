@@ -30,7 +30,6 @@ class FilmViewModel @Inject constructor(private val repository: FilmRepository) 
     fun search(text: String) {
         job?.cancel()
         job = viewModelScope.launch {
-            delay(300)
             _films.value = lista.filter { it.title.contains(text, ignoreCase = true) }
         }
     }

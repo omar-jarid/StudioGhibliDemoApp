@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +60,12 @@ fun FilmCard(film: Film, navController: NavHostController) {
     non va bene: questo vuol dire che la SearchBar è stateful!
     Rendiamola stateless:
 
-    fun SearchBar(value: String, onValueChange: (String) -> Unit, isDisplayed: Boolean, onSearch: (String) -> Unit)
+    fun SearchBar(
+        value: String,
+        onValueChange: (String) -> Unit,
+        isDisplayed: Boolean,
+        onSearch: (String) -> Unit
+    )
 
 */
 @Composable
@@ -98,12 +104,13 @@ fun SearchBar(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FilmBodyContent(
-    lista: List<Film>,
-    textState: MutableState<String>,
-    viewModel: FilmViewModel,
-    navController: NavHostController
-) {
+fun FilmBodyContent(lista: List<Film>, viewModel: FilmViewModel, navController: NavHostController) {
+    /*
+        Tenere traccia dello stato ha più senso qui, dato che questo Composable è il padre della
+        SearchBar.
+    */
+    val textState = remember { viewModel.searchState }
+
     Column {
         Spacer(modifier = Modifier.height(40.dp))
 
@@ -125,7 +132,7 @@ fun FilmBodyContent(
         */
         SearchBar(
             value = textState.value,
-            onValueChange = { textState.value = it },
+            onValueChange = { textState.value = it } ,
             isDisplayed = lista.isNotEmpty(),
             onSearch = { viewModel.search(it) }
         )

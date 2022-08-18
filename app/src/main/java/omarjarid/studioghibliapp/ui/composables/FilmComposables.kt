@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
@@ -32,9 +34,11 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun FilmCard(film: Film, navController: NavHostController) {
     Card(
-        modifier = Modifier.padding(8.dp).clickable {
-            navigateTo(route = "films/${film.id}", navController = navController)
-        },
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable {
+                navigateTo(route = "films/${film.id}", navController = navController)
+            },
         elevation = 2.dp
     ) {
         GlideImage(
@@ -47,20 +51,38 @@ fun FilmCard(film: Film, navController: NavHostController) {
     }
 }
 
+/*
+    La signature
+
+    fun SearchBar(state: MutableState<String>, isDisplayed: Boolean, onSearch: (String) -> Unit)
+
+    non va bene: questo vuol dire che la SearchBar è stateful!
+    Rendiamola stateless:
+
+    fun SearchBar(value: String, onValueChange: (String) -> Unit, isDisplayed: Boolean, onSearch: (String) -> Unit)
+
+*/
 @Composable
-fun SearchBar(state: MutableState<String>, isDisplayed: Boolean, onSearch: (String) -> Unit) {
+fun SearchBar(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isDisplayed: Boolean,
+    onSearch: (String) -> Unit
+) {
     if (isDisplayed) {
         val focusManager = LocalFocusManager.current
         TextField(
-            value = state.value,
-            onValueChange = { state.value = it },
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             singleLine = true,
             maxLines = 1,
             leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "Search") },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions {
-                onSearch(state.value)
+                onSearch(value)
                 focusManager.clearFocus()
             },
             shape = RoundedCornerShape(corner = CornerSize(16.dp)),
@@ -84,7 +106,29 @@ fun FilmBodyContent(
 ) {
     Column {
         Spacer(modifier = Modifier.height(40.dp))
-        SearchBar(state = textState, isDisplayed = lista.isNotEmpty()) { viewModel.search(it) }
+
+        /*
+            SearchBar(
+                state = textState,
+                isDisplayed = lista.isNotEmpty(),
+                onSearch = { viewModel.search(it) }
+            )
+
+            adesso diventa
+
+            SearchBar(
+                value = textState.value,
+                onValueChange = { textState.value = it },
+                isDisplayed = lista.isNotEmpty(),
+                onSearch = { viewModel.search(it) }
+            )
+        */
+        SearchBar(
+            value = textState.value,
+            onValueChange = { textState.value = it },
+            isDisplayed = lista.isNotEmpty(),
+            onSearch = { viewModel.search(it) }
+        )
         LazyVerticalGrid(
             cells = GridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp)

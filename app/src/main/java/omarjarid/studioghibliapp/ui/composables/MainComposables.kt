@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import omarjarid.example.domain.model.Film
 import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
@@ -19,7 +20,7 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
     viewModel: FilmViewModel,
-    navController: NavHostController
+    navController: NavHostController = rememberNavController()
 ) {
     NavHost(navController = navController, startDestination = "films") {
         composable(route = "films") {
@@ -43,7 +44,7 @@ fun StudioGhibliNavHost(
 fun StudioGhibliAppCompose(
     list: List<Film>,
     viewModel: FilmViewModel,
-    navController: NavHostController
+    //navController: NavHostController
 ) {
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -51,7 +52,7 @@ fun StudioGhibliAppCompose(
             StudioGhibliNavHost(
                 listFilms = list,
                 viewModel = viewModel,
-                navController = navController
+                //navController = navController
             )
         }
     }

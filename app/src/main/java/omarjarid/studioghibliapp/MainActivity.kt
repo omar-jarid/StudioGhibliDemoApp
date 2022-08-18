@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     StudioGhibliAppCompose(
                         list = films.value,
                         viewModel = viewModel,
-                        navController = rememberNavController()
+                        //navController = rememberNavController()
                     )
                 }
             }

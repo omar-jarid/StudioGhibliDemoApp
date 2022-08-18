@@ -40,9 +40,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    // Ora StudioGhibliAppCompose è stateless.
                     StudioGhibliAppCompose(
                         list = films.value,
-                        textState = remember { mutableStateOf("") },
                         viewModel = viewModel,
                         navController = rememberNavController()
                     )

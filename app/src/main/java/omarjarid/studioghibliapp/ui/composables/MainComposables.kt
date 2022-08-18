@@ -14,21 +14,17 @@ import androidx.navigation.navArgument
 import omarjarid.example.domain.model.Film
 import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 
+// Ora StudioGhibliNavHost è stateless.
 @Composable
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
-    textState: MutableState<String>,
     viewModel: FilmViewModel,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = "films") {
         composable(route = "films") {
-            FilmBodyContent(
-                lista = listFilms,
-                textState = textState,
-                viewModel = viewModel,
-                navController = navController
-            )
+            // Solo FilmBodyContent è stateful!
+            FilmBodyContent(lista = listFilms, viewModel = viewModel, navController = navController)
         }
 
         composable(
@@ -42,10 +38,10 @@ fun StudioGhibliNavHost(
     }
 }
 
+// Ora StudioGhibliAppCompose è stateless.
 @Composable
 fun StudioGhibliAppCompose(
     list: List<Film>,
-    textState: MutableState<String>,
     viewModel: FilmViewModel,
     navController: NavHostController
 ) {
@@ -54,7 +50,6 @@ fun StudioGhibliAppCompose(
             CircularProgressBar(isDisplayed = list.isEmpty())
             StudioGhibliNavHost(
                 listFilms = list,
-                textState = textState,
                 viewModel = viewModel,
                 navController = navController
             )

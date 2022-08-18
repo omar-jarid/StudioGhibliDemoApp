@@ -1,5 +1,6 @@
 package omarjarid.studioghibliapp.presentation.viewmodels
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,14 @@ class FilmViewModel @Inject constructor(private val repository: FilmRepository) 
     val films: StateFlow<List<Film>> = _films
     private var lista: List<Film> = emptyList()
     private var job: Job? = null
+
+    /*
+        Lo stato è bene che stia qui.
+
+        remember perde lo stato in caso di rotazione schermo, ma l'Activity non perde il ViewModel
+        e quindi può andare a recuperare lo stato da qui.
+    */
+    val searchState = mutableStateOf("")
 
     fun loadFilms() {
         viewModelScope.launch {

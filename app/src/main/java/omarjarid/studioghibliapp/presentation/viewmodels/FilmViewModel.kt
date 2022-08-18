@@ -26,7 +26,6 @@ class FilmViewModel @Inject constructor(private val repository: FilmRepository) 
         }
     }
 
-    // Metodo di ricerca.
     fun search(text: String) {
         job?.cancel()
         job = viewModelScope.launch {

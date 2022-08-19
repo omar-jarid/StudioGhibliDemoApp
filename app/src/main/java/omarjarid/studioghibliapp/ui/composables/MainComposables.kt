@@ -22,12 +22,12 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
-    viewModel: FilmViewModel,
+    viewModel: FilmViewModel = viewModel(), // ripescato come parametro per non diventare pazzo.
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(navController = navController, startDestination = "films") {
         composable(route = "films") {
-            // Solo FilmBodyContent è stateful!
+            // Solo FilmBodyContent è stateful (la SearchBar ha uno stato)!
             FilmBodyContent(lista = listFilms, viewModel = viewModel, navController = navController)
         }
 
@@ -44,14 +44,11 @@ fun StudioGhibliNavHost(
 
 // Ora StudioGhibliAppCompose è stateless.
 @Composable
-fun StudioGhibliAppCompose(viewModel: FilmViewModel) {
-    val films = viewModel.films.collectAsState()
-    val list = films.value
-
+fun StudioGhibliAppCompose(list: List<Film>/*, viewModel: FilmViewModel*/) {
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             CircularProgressBar(isDisplayed = list.isEmpty())
-            StudioGhibliNavHost(listFilms = list, viewModel = viewModel)
+            StudioGhibliNavHost(listFilms = list)
         }
     }
 }

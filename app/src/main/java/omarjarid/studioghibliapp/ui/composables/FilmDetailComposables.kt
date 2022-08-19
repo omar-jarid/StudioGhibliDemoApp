@@ -142,7 +142,7 @@ fun FilmDetail(film: Film, navController: NavHostController) {
                             start.linkTo(parent.start, margin = 16.dp)
                             top.linkTo(parent.top, margin = (arrowHeightPx / d).dp)
                         }
-                        .clickable { navigateTo("films", navController = navController) }
+                        .clickable { navController.navigate(route = "films") }
                 )
 
                 FilmTitle(

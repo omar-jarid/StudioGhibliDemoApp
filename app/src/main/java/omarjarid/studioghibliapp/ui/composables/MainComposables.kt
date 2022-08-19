@@ -18,11 +18,10 @@ import androidx.navigation.navArgument
 import omarjarid.example.domain.model.Film
 import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 
-// Ora StudioGhibliNavHost è stateless.
 @Composable
 fun StudioGhibliNavHost(
     listFilms: List<Film>,
-    viewModel: FilmViewModel = viewModel(), // ripescato come parametro per non diventare pazzo.
+    viewModel: FilmViewModel = viewModel(), // Riprendo qui il ViewModel già esistente.
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(navController = navController, startDestination = "films") {
@@ -42,9 +41,8 @@ fun StudioGhibliNavHost(
     }
 }
 
-// Ora StudioGhibliAppCompose è stateless.
 @Composable
-fun StudioGhibliAppCompose(list: List<Film>/*, viewModel: FilmViewModel*/) {
+fun StudioGhibliAppCompose(list: List<Film>) {
     Scaffold { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             CircularProgressBar(isDisplayed = list.isEmpty())

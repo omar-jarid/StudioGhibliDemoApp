@@ -36,11 +36,9 @@ import omarjarid.studioghibliapp.presentation.viewmodels.FilmViewModel
 @Composable
 fun FilmCard(film: Film, navController: NavHostController) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable {
-                navigateTo(route = "films/${film.id}", navController = navController)
-            },
+        modifier = Modifier.padding(8.dp).clickable {
+            navController.navigate(route = "films/${film.id}")
+        },
         elevation = 2.dp
     ) {
         GlideImage(
@@ -53,22 +51,6 @@ fun FilmCard(film: Film, navController: NavHostController) {
     }
 }
 
-/*
-    La signature
-
-    fun SearchBar(state: MutableState<String>, isDisplayed: Boolean, onSearch: (String) -> Unit)
-
-    non va bene: questo vuol dire che la SearchBar è stateful!
-    Rendiamola stateless:
-
-    fun SearchBar(
-        value: String,
-        onValueChange: (String) -> Unit,
-        isDisplayed: Boolean,
-        onSearch: (String) -> Unit
-    )
-
-*/
 @Composable
 fun SearchBar(
     value: String,
@@ -106,37 +88,17 @@ fun SearchBar(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilmBodyContent(lista: List<Film>, viewModel: FilmViewModel, navController: NavHostController) {
-    /*
-        Tenere traccia dello stato ha più senso qui, dato che questo Composable è il padre della
-        SearchBar.
-    */
     val textState = remember { viewModel.searchState }
 
     Column {
         Spacer(modifier = Modifier.height(40.dp))
-
-        /*
-            SearchBar(
-                state = textState,
-                isDisplayed = lista.isNotEmpty(),
-                onSearch = { viewModel.search(it) }
-            )
-
-            adesso diventa
-
-            SearchBar(
-                value = textState.value,
-                onValueChange = { textState.value = it },
-                isDisplayed = lista.isNotEmpty(),
-                onSearch = { viewModel.search(it) }
-            )
-        */
         SearchBar(
             value = textState.value,
             onValueChange = { textState.value = it } ,
             isDisplayed = lista.isNotEmpty(),
             onSearch = { viewModel.search(it) }
         )
+
         LazyVerticalGrid(
             cells = GridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp)

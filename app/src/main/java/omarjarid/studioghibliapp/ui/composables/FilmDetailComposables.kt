@@ -3,9 +3,7 @@ package omarjarid.studioghibliapp.ui.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -26,7 +24,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
 import omarjarid.example.domain.model.Film
-import omarjarid.studioghibliapp.navigateTo
 import omarjarid.studioghibliapp.ui.theme.TextWhite
 
 @Composable

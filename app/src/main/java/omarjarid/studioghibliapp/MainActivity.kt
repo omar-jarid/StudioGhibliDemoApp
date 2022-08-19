@@ -32,7 +32,8 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         setContent {
-            //val films = viewModel.films.collectAsState()
+            val films = viewModel.films.collectAsState()
+            val list = films.value
 
             StudioGhibliDemoAppTheme {
                 // A surface container using the 'background' color from the theme
@@ -41,11 +42,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     // Ora StudioGhibliAppCompose è stateless.
-                    StudioGhibliAppCompose(
-                        //list = films.value,
-                        viewModel = viewModel,
-                        //navController = rememberNavController()
-                    )
+                    StudioGhibliAppCompose(list)
                 }
             }
         }
